@@ -1,0 +1,610 @@
+{
+"ROLE": "Senior Full Stack Engineer",
+
+"PROJECT_NAME": "KanbanFlow",
+
+"PROJECT_DESCRIPTION": "A Trello-inspired Kanban project management platform. Users authenticate with email and password. After authentication, users can browse and edit all public projects and their own private projects. Users can create either public or private projects, create custom columns, create tasks, edit tasks, delete tasks, and drag tasks between columns.",
+
+"TECH_STACK": {
+"FRONTEND": {
+"FRAMEWORK": "React",
+"ROUTING": "React Router DOM",
+"STYLING": "Tailwind CSS",
+"UI_LIBRARY": "React Bits",
+"DESIGN_REFERENCE": "21st.dev",
+"DRAG_DROP": "dnd-kit",
+"STATE_MANAGEMENT": "React Context + useState",
+"HTTP_CLIENT": "Axios"
+},
+
+```
+"BACKEND": {
+  "RUNTIME": "Node.js",
+  "FRAMEWORK": "Express.js",
+  "AUTH": "JWT",
+  "PASSWORD_HASHING": "bcrypt",
+  "VALIDATION": "express-validator"
+},
+
+"DATABASE": {
+  "TYPE": "PostgreSQL"
+}
+```
+
+},
+
+"DATABASE_SCHEMA": {
+"users": {
+"id": "SERIAL PRIMARY KEY",
+"email": "VARCHAR(255) UNIQUE NOT NULL",
+"password_hash": "TEXT NOT NULL",
+"created_at": "TIMESTAMP DEFAULT NOW()"
+},
+
+```
+"visibility_enum": [
+  "public",
+  "private"
+],
+
+"projects": {
+  "id": "SERIAL PRIMARY KEY",
+  "name": "VARCHAR(255) NOT NULL",
+  "visibility": "visibility_enum NOT NULL",
+  "owner_id": "INTEGER REFERENCES users(id)",
+  "created_at": "TIMESTAMP DEFAULT NOW()"
+},
+
+"columns": {
+  "id": "SERIAL PRIMARY KEY",
+  "project_id": "INTEGER REFERENCES projects(id) ON DELETE CASCADE",
+  "name": "VARCHAR(255) NOT NULL",
+  "position": "INTEGER NOT NULL"
+},
+
+"tasks": {
+  "id": "SERIAL PRIMARY KEY",
+  "column_id": "INTEGER REFERENCES columns(id) ON DELETE CASCADE",
+  "title": "VARCHAR(255) NOT NULL",
+  "description": "TEXT",
+  "due_date": "DATE",
+  "position": "INTEGER NOT NULL",
+  "created_at": "TIMESTAMP DEFAULT NOW()"
+}
+```
+
+},
+
+"AUTHENTICATION_FLOW": {
+"SIGNUP": [
+"User enters email",
+"User enters password",
+"Password hashed using bcrypt",
+"User record created",
+"JWT generated",
+"JWT returned to frontend"
+],
+
+```
+"LOGIN": [
+  "User enters email",
+  "User enters password",
+  "Compare password with bcrypt",
+  "Generate JWT",
+  "Return JWT"
+],
+
+"JWT_PAYLOAD": {
+  "userId": "INTEGER",
+  "email": "STRING"
+},
+
+"FRONTEND_STORAGE": {
+  "token": "localStorage"
+}
+```
+
+},
+
+"AUTHORIZATION_RULES": {
+"PUBLIC_PROJECT": {
+"VIEW": "Any authenticated user",
+"EDIT": "Any authenticated user",
+"DELETE": "Any authenticated user"
+},
+
+```
+"PRIVATE_PROJECT": {
+  "VIEW": "Owner only",
+  "EDIT": "Owner only",
+  "DELETE": "Owner only"
+}
+```
+
+},
+
+"DASHBOARD_PAGE": {
+"SECTIONS": [
+"Search Bar",
+"Public Projects",
+"My Private Projects",
+"Create Project Card"
+],
+
+```
+"LAYOUT": {
+  "TYPE": "Responsive Card Grid",
+  "CARDS_PER_ROW": "Auto Responsive"
+}
+```
+
+},
+
+"PROJECT_CARD": {
+"FIELDS": [
+"Project Name",
+"Visibility Badge",
+"Created Date"
+],
+
+```
+"ON_CLICK": "Navigate to Project Page"
+```
+
+},
+
+"CREATE_PROJECT_MODAL": {
+"FIELDS": [
+{
+"name": "project_name",
+"type": "text"
+},
+{
+"name": "visibility",
+"type": "radio",
+"values": [
+"public",
+"private"
+]
+}
+]
+},
+
+"PROJECT_PAGE": {
+"LAYOUT": "Horizontal Kanban Board",
+
+```
+"FEATURES": [
+  "Create Column",
+  "Rename Column",
+  "Delete Column",
+  "Create Task",
+  "Edit Task",
+  "Delete Task",
+  "Drag Task Between Columns"
+]
+```
+
+},
+
+"COLUMN_RULES": {
+"UNLIMITED_COLUMNS": true,
+
+```
+"EXAMPLES": [
+  "Backlog",
+  "Need To Do",
+  "Doing",
+  "Review",
+  "Done"
+]
+```
+
+},
+
+"TASK_CARD": {
+"SHOW": [
+"Title",
+"Due Date"
+],
+
+```
+"ON_CLICK": "Open Task Modal"
+```
+
+},
+
+"TASK_MODAL": {
+"FIELDS": [
+{
+"name": "title",
+"type": "text",
+"required": true
+},
+{
+"name": "description",
+"type": "textarea"
+},
+{
+"name": "due_date",
+"type": "date"
+}
+]
+},
+
+"DND_BEHAVIOR": {
+"LIBRARY": "dnd-kit",
+
+```
+"WHEN_TASK_MOVES": [
+  "Update column_id",
+  "Update position",
+  "Persist to database"
+]
+```
+
+},
+
+"API_ROUTES": {
+"AUTH": [
+"POST /auth/signup",
+"POST /auth/login"
+],
+
+```
+"PROJECTS": [
+  "GET /projects",
+  "GET /projects/:id",
+  "POST /projects",
+  "PUT /projects/:id",
+  "DELETE /projects/:id"
+],
+
+"COLUMNS": [
+  "POST /columns",
+  "PUT /columns/:id",
+  "DELETE /columns/:id"
+],
+
+"TASKS": [
+  "POST /tasks",
+  "PUT /tasks/:id",
+  "DELETE /tasks/:id",
+  "PUT /tasks/:id/move"
+]
+```
+
+},
+
+"GET_PROJECTS_LOGIC": {
+"DESCRIPTION": "Return all public projects plus private projects owned by the current user",
+
+```
+"SQL": "SELECT * FROM projects WHERE visibility='public' OR owner_id=currentUserId"
+```
+
+},
+
+"PROJECT_ACCESS_LOGIC": {
+"DESCRIPTION": "Protect private projects from unauthorized access",
+
+```
+"RULE": "If project.visibility is private and project.owner_id does not equal req.user.id, return 403 Forbidden"
+```
+
+},
+
+"SEARCH_FUNCTIONALITY": {
+"LOCATION": "Dashboard",
+
+```
+"SEARCH_BY": [
+  "Project Name"
+],
+
+"BEHAVIOR": "Real-time filtering"
+```
+
+},
+
+"UI_REQUIREMENTS": {
+"DESIGN_STYLE": "Modern SaaS",
+
+```
+"USE_REACT_BITS": [
+  "Buttons",
+  "Cards",
+  "Modals",
+  "Inputs",
+  "Dropdowns"
+],
+
+"USE_21ST_DEV": [
+  "Dashboard Inspiration",
+  "Kanban Board Layout",
+  "Authentication Layout"
+],
+
+"RESPONSIVE": true
+```
+
+},
+
+"EXPLICITLY_DO_NOT_BUILD": [
+"Comments",
+"Notifications",
+"Email Invitations",
+"Collaboration",
+"Attachments",
+"File Uploads",
+"Role Permissions",
+"Admin Dashboard",
+"Analytics"
+]
+}
+
+
+
+"""With phases added:"""
+
+
+{
+"IMPLEMENTATION_PHASES": [
+
+```
+{
+  "PHASE": 1,
+  "NAME": "Project Setup",
+
+  "TASKS": [
+    "Initialize React frontend",
+    "Initialize Express backend",
+    "Configure PostgreSQL connection",
+    "Configure environment variables",
+    "Configure folder structure",
+    "Install all required dependencies"
+  ],
+
+  "DELIVERABLE": [
+    "Running frontend",
+    "Running backend",
+    "Connected database"
+  ]
+},
+
+{
+  "PHASE": 2,
+  "NAME": "Database Design",
+
+  "TASKS": [
+    "Create visibility enum",
+    "Create users table",
+    "Create projects table",
+    "Create columns table",
+    "Create tasks table",
+    "Add foreign keys",
+    "Add indexes"
+  ],
+
+  "DELIVERABLE": [
+    "database.sql file",
+    "Working PostgreSQL schema"
+  ]
+},
+
+{
+  "PHASE": 3,
+  "NAME": "Authentication",
+
+  "TASKS": [
+    "Create signup endpoint",
+    "Create login endpoint",
+    "Hash passwords using bcrypt",
+    "Generate JWT",
+    "Create auth middleware",
+    "Protect routes"
+  ],
+
+  "DELIVERABLE": [
+    "Working authentication"
+  ]
+},
+
+{
+  "PHASE": 4,
+  "NAME": "Projects CRUD",
+
+  "TASKS": [
+    "Create project model",
+    "Create project routes",
+    "Create project controller",
+    "Create project service",
+    "Implement create project",
+    "Implement update project",
+    "Implement delete project",
+    "Implement get projects"
+  ],
+
+  "DELIVERABLE": [
+    "Working projects CRUD"
+  ]
+},
+
+{
+  "PHASE": 5,
+  "NAME": "Authorization Rules",
+
+  "TASKS": [
+    "Public project access logic",
+    "Private project access logic",
+    "Owner-only editing logic",
+    "Owner-only delete logic",
+    "403 unauthorized responses"
+  ],
+
+  "DELIVERABLE": [
+    "Secure project permissions"
+  ]
+},
+
+{
+  "PHASE": 6,
+  "NAME": "Columns CRUD",
+
+  "TASKS": [
+    "Create column endpoints",
+    "Create column controller",
+    "Create column database queries",
+    "Implement create column",
+    "Implement update column",
+    "Implement delete column"
+  ],
+
+  "DELIVERABLE": [
+    "Working column management"
+  ]
+},
+
+{
+  "PHASE": 7,
+  "NAME": "Tasks CRUD",
+
+  "TASKS": [
+    "Create task endpoints",
+    "Create task controller",
+    "Implement create task",
+    "Implement update task",
+    "Implement delete task",
+    "Implement get tasks"
+  ],
+
+  "DELIVERABLE": [
+    "Working task management"
+  ]
+},
+
+{
+  "PHASE": 8,
+  "NAME": "Frontend Authentication",
+
+  "TASKS": [
+    "Login page",
+    "Signup page",
+    "Auth context",
+    "Protected routes",
+    "JWT persistence"
+  ],
+
+  "DELIVERABLE": [
+    "Working frontend authentication"
+  ]
+},
+
+{
+  "PHASE": 9,
+  "NAME": "Dashboard",
+
+  "TASKS": [
+    "Project card component",
+    "Public projects section",
+    "Private projects section",
+    "Create project modal",
+    "Search functionality"
+  ],
+
+  "DELIVERABLE": [
+    "Working dashboard"
+  ]
+},
+
+{
+  "PHASE": 10,
+  "NAME": "Kanban Board",
+
+  "TASKS": [
+    "Column component",
+    "Task card component",
+    "Task modal",
+    "Create task UI",
+    "Edit task UI",
+    "Delete task UI"
+  ],
+
+  "DELIVERABLE": [
+    "Functional Kanban board"
+  ]
+},
+
+{
+  "PHASE": 11,
+  "NAME": "Drag And Drop",
+
+  "TASKS": [
+    "Install dnd-kit",
+    "Create drag handlers",
+    "Move task between columns",
+    "Persist task movement to PostgreSQL",
+    "Update positions"
+  ],
+
+  "DELIVERABLE": [
+    "Trello-like drag and drop"
+  ]
+},
+
+{
+  "PHASE": 12,
+  "NAME": "UI Polish",
+
+  "TASKS": [
+    "Replace generic UI with React Bits components",
+    "Use 21st.dev design patterns",
+    "Improve responsiveness",
+    "Improve spacing",
+    "Improve typography"
+  ],
+
+  "DELIVERABLE": [
+    "Production-quality UI"
+  ]
+},
+
+{
+  "PHASE": 13,
+  "NAME": "Deployment",
+
+  "TASKS": [
+    "Deploy PostgreSQL to Railway",
+    "Deploy backend to Railway",
+    "Deploy frontend to Netlify",
+    "Configure environment variables",
+    "Test production build"
+  ],
+
+  "DELIVERABLE": [
+    "Live application"
+  ]
+},
+
+{
+  "PHASE": 14,
+  "NAME": "Documentation",
+
+  "TASKS": [
+    "Create README",
+    "Installation instructions",
+    "Environment variables",
+    "API documentation",
+    "Known limitations",
+    "Future improvements"
+  ],
+
+  "DELIVERABLE": [
+    "Submission-ready repository"
+  ]
+}
+```
+
+]
+}
+
