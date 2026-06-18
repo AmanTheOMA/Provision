@@ -9,16 +9,23 @@ export default function HomePage() {
     <div className="relative grid min-h-screen lg:grid-cols-2">
       <header className="absolute right-0 top-0 z-20 flex items-center gap-3 p-6">
         <Link to="/login">
-          <Button variant="outline" size="sm">
+          <Button
+            variant="outline"
+            size="sm"
+            className="border-white/10 bg-white/5 text-white/80 hover:bg-white/15"
+          >
             Log in
           </Button>
         </Link>
         <Link to="/signup">
-          <Button size="sm">Sign up</Button>
+          <Button size="sm" className="bg-white text-black hover:bg-white/90">
+            Sign up
+          </Button>
         </Link>
       </header>
 
-      <div className="flex flex-col justify-center bg-neutral-950 px-8 py-24 lg:px-16">
+      {/* Left */}
+      <div className="flex flex-col justify-center px-8 py-24 lg:px-16">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -43,17 +50,30 @@ export default function HomePage() {
 
           <div className="mt-10 flex gap-3 lg:hidden">
             <Link to="/login">
-              <Button variant="outline">Log in</Button>
+              <Button
+                variant="outline"
+                className="border-white/10 bg-white/5 text-white/80"
+              >
+                Log in
+              </Button>
             </Link>
             <Link to="/signup">
-              <Button>Sign up</Button>
+              <Button className="bg-white text-black hover:bg-white/90">
+                Sign up
+              </Button>
             </Link>
           </div>
         </motion.div>
       </div>
 
-      <div className="relative hidden min-h-screen overflow-hidden bg-black lg:block">
-        <CardSwap width={480} height={320} pauseOnHover>
+      {/* Right */}
+      <div className="relative hidden min-h-screen items-center justify-center overflow-hidden lg:flex">
+        <CardSwap
+          width={480}
+          height={320}
+          pauseOnHover
+          className="!static !translate-x-0 !translate-y-0 !scale-100"
+        >
           {featureCards.map((card) => (
             <Card
               key={card.title}
