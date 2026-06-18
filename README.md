@@ -73,13 +73,13 @@ http://localhost:5173
 - User-Specific Project Ownership
 - Form Validation
 
-## Known Bugs / Limitations
+## Known Limitations
 
 - No user profile or password reset flow
 - Columns can't be reordered (only tasks can be dragged)
 - Changes from another session require a refresh
 
-## What to Add
+## Will Add
 
 - Column drag-and-drop reordering
 - Activity log per project
