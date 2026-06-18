@@ -39,13 +39,14 @@ export default function HomePage() {
             Ship projects with clarity, not chaos.
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-white/60">
-            Provision is your Kanban command center — plan in columns, track
-            deadlines, and move work forward without the noise.
+            Provision is your Kanban command center. Plan in columns, track
+            deadlines, and move work forward without noise.
           </p>
           <ul className="mt-8 space-y-3 text-sm text-white/70">
             <li>See every task, column, and deadline in one place</li>
             <li>Collaborate on public boards or keep work private</li>
             <li>Drag tasks across columns as priorities shift</li>
+            <li>Limitless boards and NO PAYMENTS!</li>
           </ul>
 
           <div className="mt-10 flex gap-3 lg:hidden">

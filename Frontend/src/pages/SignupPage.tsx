@@ -49,8 +49,7 @@ export default function SignupPage() {
             Ship projects with clarity, not chaos.
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-white/60">
-            Provision is your Kanban command center — plan in columns, track
-            deadlines, and move work forward without the noise.
+            Use Provision for FREE for EVER for YOU!
           </p>
         </motion.div>
 
@@ -86,7 +85,10 @@ export default function SignupPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium text-white/80">
+              <label
+                htmlFor="email"
+                className="text-sm font-medium text-white/80"
+              >
                 Email
               </label>
               <Input
@@ -104,7 +106,10 @@ export default function SignupPage() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium text-white/80">
+              <label
+                htmlFor="password"
+                className="text-sm font-medium text-white/80"
+              >
                 Password
               </label>
               <Input
@@ -122,7 +127,11 @@ export default function SignupPage() {
             </div>
 
             {error && (
-              <p id="signup-error" className="text-sm text-red-400" role="alert">
+              <p
+                id="signup-error"
+                className="text-sm text-red-400"
+                role="alert"
+              >
                 {error}
               </p>
             )}
